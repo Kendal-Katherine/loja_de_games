@@ -50,9 +50,19 @@ public class ProdutoController {
 		return ResponseEntity.ok(produtoRepository.findAllByNomeContainingIgnoreCase(nome));
 	}
 
+	@GetMapping("/menor/{preco}")
+	public ResponseEntity<List<Produto>> getByMenor(@PathVariable Double preco) {
+		return ResponseEntity.ok(produtoRepository.findByPrecoLessThanEqual(preco));
+	}
+	
+	@GetMapping("/maior/{preco}")
+	public ResponseEntity<List<Produto>> getByMaior(@PathVariable Double preco) {
+		return ResponseEntity.ok(produtoRepository.findByPrecoGreaterThan(preco));
+	}
+	
 	@PostMapping
 	public ResponseEntity<Produto> post(@Valid @RequestBody Produto produto) {
-		if (categoriaRepository.existsById(produto.getCategoria().getId()) && produto.getCategoria().getId() != null) {
+		if (categoriaRepository.existsById(produto.getCategoria().getId())) {
 			return ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto));
 		} else {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria não existe!", null);
