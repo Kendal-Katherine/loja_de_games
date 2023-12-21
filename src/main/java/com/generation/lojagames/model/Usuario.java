@@ -43,6 +43,7 @@ public class Usuario {
 	@Size(max = 5000, message = "O link da foto não pode ser maior do que 5000 caracteres")
 	private String foto;
 	
+	@NotBlank(message = "O Atributo Data de nascimento é Obrigatório!")
 	@Column(name = "data_nascimento")
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataNascimento;
