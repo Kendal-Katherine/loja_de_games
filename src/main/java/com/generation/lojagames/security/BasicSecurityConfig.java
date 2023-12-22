@@ -50,23 +50,23 @@ public class BasicSecurityConfig {
             throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
+    //AQUI ESTABELECEMOS AS REGRAS DE SEGURANÇA DA PÁGINA
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+    	//REGRAS DE OPERAÇÃO DA INTERNET - 
     	http
 	        .sessionManagement(management -> management
 	                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 	        		.csrf(csrf -> csrf.disable())
-	        		.cors(withDefaults());
+	        		.cors(withDefaults());//PERMITE REQUISIÇÕES DE FORA DO SITE
 
     	http
 	        .authorizeHttpRequests((auth) -> auth
-	                .requestMatchers("/usuarios/logar").permitAll()
-	                .requestMatchers("/usuarios/cadastrar").permitAll()
-	                .requestMatchers("/error/**").permitAll()
-	                .requestMatchers(HttpMethod.OPTIONS).permitAll()
-	                .anyRequest().authenticated())
+	                .requestMatchers("/usuarios/logar").permitAll()//requisisão autorizada sem autenticação
+	                .requestMatchers("/usuarios/cadastrar").permitAll() //requisisão autorizada sem autenticação
+	                .requestMatchers("/error/**").permitAll() //requisisão autorizada sem autenticação
+	                .requestMatchers(HttpMethod.OPTIONS).permitAll()//diz o que o caminho pode fazer, fazer um get, um post, etc //requisisão autorizada sem autenticação
+	                .anyRequest().authenticated()) //as demais requisições precisa de autorização
 	        .authenticationProvider(authenticationProvider())
 	        .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
 	        .httpBasic(withDefaults());

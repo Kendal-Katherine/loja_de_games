@@ -15,9 +15,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+
+//FAZ VERIFICAÇÃO DO TOKEN ... ESSA CLASSE LIDA COM A CRIAÇÃO E VERIFICAÇÃO DE TOKEN
 @Component
 public class JwtService {
-
+	//SECRET TEM QUE ESTÁ ESCONDIDA E NÃO PODE APARECER NO CÓDIGO, NESSE CASO DE APRENDIZADO PODE
 	public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
 	private Key getSignKey() {
@@ -35,24 +37,24 @@ public class JwtService {
 		final Claims claims = extractAllClaims(token);
 		return claimsResolver.apply(claims);
 	}
-
+	//payload extrai o nome do usuário
 	public String extractUsername(String token) {
 		return extractClaim(token, Claims::getSubject);
 	}
-
+	//payload extrai a data de expiração do token
 	public Date extractExpiration(String token) {
 		return extractClaim(token, Claims::getExpiration);
 	}
-
+	//payload verifica se o token está expirado
 	private Boolean isTokenExpired(String token) {
 		return extractExpiration(token).before(new Date());
 	}
-
+	//payload verifica se o token é válido
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		final String username = extractUsername(token);
 		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
-
+	//ELE AQUI FABRICA O TOKEN 
 	private String createToken(Map<String, Object> claims, String userName) {
 		return Jwts.builder()
 					.setClaims(claims)
